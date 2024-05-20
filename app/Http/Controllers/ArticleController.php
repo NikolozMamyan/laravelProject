@@ -44,20 +44,19 @@ class ArticleController extends Controller
             'category' => 'required',
             'image' => 'nullable|image',
         ]);
-
+    
         $article = new Article($validatedData);
-
+    
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imagePath = $image->store('public/images');
             $article->image = $imagePath;
         }
-
+    
         $article->save();
-
+    
         return redirect()->route('articles.index')->with('success', 'Article créé avec succès.');
     }
-
     /**
      * Afficher les détails d'un article.
      *

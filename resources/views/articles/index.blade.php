@@ -12,15 +12,20 @@
 
         <ul>
             @forelse($articles as $article)
-                <li class="mb-4">
-                    <h2 class="text-xl font-bold">{{ $article->title }}</h2>
-                    <p>{{ $article->content }}</p>
-                    <p>Catégorie : {{ $article->category }}</p>
-                    <a href="{{ route('articles.show', $article->id) }}" class="text-blue-500 hover:underline">Voir les détails</a>
-                </li>
-            @empty
-                <p>Aucun article trouvé.</p>
-            @endforelse
+            <li class="mb-4">
+                <h2 class="text-xl font-bold">{{ $article->title }}</h2>
+                <p>{{ $article->content }}</p>
+                <p>Catégorie : {{ $article->category }}</p>
+                <a href="{{ route('articles.show', $article->id) }}" class="text-blue-500 hover:underline">Voir les détails</a>
+                <form action="{{ route('articles.destroy', $article->id) }}" method="POST" class="inline-block">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-red-500 hover:text-red-700">Supprimer</button>
+                </form>
+            </li>
+        @empty
+            <p>Aucun article trouvé.</p>
+        @endforelse
         </ul>
     </div>
 @endsection
