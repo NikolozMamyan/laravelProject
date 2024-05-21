@@ -37,6 +37,14 @@
         {{ message }}
       </p>
     </div>
+    <div class="mt-6 text-end">
+      <a
+      href="/articles"  
+        class="w-full  text-dark p-1 rounded-lg hover:text-green p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+      >
+        Voir les articles
+    </a>
+    </div>
   </div>
 </template>
 
@@ -62,7 +70,6 @@ export default {
         const response = await axios.post('http://127.0.0.1:8000/articles', this.article);
         this.message = 'Article créé avec succès!';
         this.success = true;
-        // Réinitialiser le formulaire
         this.article = {
           title: '',
           content: '',
@@ -74,7 +81,19 @@ export default {
         this.success = false;
         console.error('Erreur lors de la création de l\'article:', error);
       }
+    },
+    goToArticles() {
+      this.$router.push({ name: 'ArticleIndex' }); // Assurez-vous que le nom de la route correspond à votre configuration vue-router
     }
   }
 }
 </script>
+
+<style scoped>
+.text-green-500 {
+  color: #38a169;
+}
+.text-red-500 {
+  color: #e53e3e;
+}
+</style>

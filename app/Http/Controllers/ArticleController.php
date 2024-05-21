@@ -49,8 +49,8 @@ class ArticleController extends Controller
         // Création de l'article
         $article = Article::create($validatedData);
 
-        // Retourner une réponse JSON
-        return response()->json(['message' => 'Article créé avec succès!', 'article' => $article], 201);
+        // Redirection avec un message de succès
+        return redirect()->route('articles.index')->with('success', 'Article créé avec succès!');
     }
     /**
      * Afficher les détails d'un article.
@@ -74,37 +74,23 @@ class ArticleController extends Controller
         return view('articles.edit', compact('article'));
     }
 
-    /**
-     * Mettre à jour un article existant.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
+    // Mettre à jour l'article
     public function update(Request $request, Article $article)
     {
+        // Validation des données
         $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'category' => 'required',
-            'image' => 'nullable|image',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|string',
         ]);
 
-        $article->fill($validatedData);
+        // Mise à jour de l'article
+        $article->update($validatedData);
 
-        if ($request->hasFile('image')) {
-            if ($article->image) {
-                Storage::delete($article->image);
-            }
-
-            $image = $request->file('image');
-            $imagePath = $image->store('public/images');
-            $article->image = $imagePath;
-        }
-
-        $article->save();
-
-        return redirect()->route('articles.index')->with('success', 'Article modifié avec succès.');
+        // Retourner une réponse JSON
+     
+        return redirect()->route('articles.index')->with('success', 'Article mise à jour avec succès!');
     }
 
     /**
