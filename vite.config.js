@@ -10,4 +10,15 @@ export default defineConfig({
         }),
         vue(),
     ],
+    server: {
+        host: 'localhost',
+        hmr: {
+            host: 'localhost'
+        },
+        proxy: {
+            '/api': 'http://localhost:8000',
+       
+            rewrite: (path) => path.replace(/^\/api/, '')
+        }
+    }
 });

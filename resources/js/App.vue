@@ -14,7 +14,5 @@
   }
   </script>
   
-  <style>
-  /* Ajoute des styles globaux si nécessaire */
-  </style>
+
   

@@ -6,16 +6,19 @@
         v-model="article.title" 
         placeholder="Titre" 
         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
       >
       <textarea 
         v-model="article.content" 
         placeholder="Contenu" 
         class="w-full h-32 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
       ></textarea>
       <input 
         v-model="article.category" 
         placeholder="Catégorie" 
         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        required
       >
       <input 
         v-model="article.image" 
@@ -29,6 +32,11 @@
         Créer
       </button>
     </form>
+    <div v-if="message" class="mt-4 text-center">
+      <p :class="{'text-green-500': success, 'text-red-500': !success}">
+        {{ message }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -43,19 +51,29 @@ export default {
         content: '',
         category: '',
         image: ''
-      }
+      },
+      message: '',
+      success: false
     }
   },
   methods: {
-    createArticle() {
-      axios.post('/api/articles/create', this.article)
-        .then(response => {
-          // Rediriger vers la liste des articles ou faire quelque chose d'autre
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    async createArticle() {
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/articles', this.article);
+        this.message = 'Article créé avec succès!';
+        this.success = true;
+        // Réinitialiser le formulaire
+        this.article = {
+          title: '',
+          content: '',
+          category: '',
+          image: ''
+        };
+      } catch (error) {
+        this.message = 'Erreur lors de la création de l\'article.';
+        this.success = false;
+        console.error('Erreur lors de la création de l\'article:', error);
+      }
     }
   }
 }

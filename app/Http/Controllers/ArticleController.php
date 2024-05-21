@@ -38,24 +38,19 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        // Validation des données
         $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'category' => 'required',
-            'image' => 'nullable|image',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'category' => 'required|string|max:255',
+            'image' => 'nullable|string',
         ]);
-    
-        $article = new Article($validatedData);
-    
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('public/images');
-            $article->image = $imagePath;
-        }
-    
-        $article->save();
-    
-        return redirect()->route('articles.index')->with('success', 'Article créé avec succès.');
+
+        // Création de l'article
+        $article = Article::create($validatedData);
+
+        // Retourner une réponse JSON
+        return response()->json(['message' => 'Article créé avec succès!', 'article' => $article], 201);
     }
     /**
      * Afficher les détails d'un article.
